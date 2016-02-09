@@ -1,4 +1,4 @@
-// Note: uses gapi coming from "https://apis.google.com/js/client.js?onload=checkAuth"
+// Note: uses gapi coming from "https://apis.google.com/js/client.js"
 import { createAction, handleActions } from 'redux-actions'
 
 // ------------------------------------
@@ -93,6 +93,7 @@ const gmailAuth = (onlyCheck, success, error) => {
       }
     )
   } else {
+    console.log('Google API not ready, waiting...')
     setTimeout(() => gmailAuth(onlyCheck, success, error), 500)
   }
 }
