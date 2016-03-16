@@ -16,7 +16,9 @@ export const SELECT_GMAIL_LABEL = 'SELECT_GMAIL_LABEL'
 // Default state
 // ------------------------------------
 let defaultState = {
-  email: '',
+  profile: {
+    emailAddress: ''
+  },
   loading: true,
   labels: [],
   currentLabel: null
@@ -122,7 +124,7 @@ export const actions = {
 // Reducer
 // ------------------------------------
 export default handleActions({
-  [SET_GMAIL_CREDENTIALS]: (state, { payload }) => Object.assign({}, state, payload),
+  [SET_GMAIL_CREDENTIALS]: (state, { payload }) => Object.assign({}, state, { profile: { emailAddress: payload.email } }),
   [CHANGE_LOADING]: (state, { payload }) => Object.assign({}, state, { loading: payload }),
   [SET_GMAIL_LABELS]: (state, { payload }) => Object.assign({}, state, { labels: payload }),
   [SELECT_GMAIL_LABEL]: (state, {payload}) => Object.assign({}, state, { currentLabel: payload })

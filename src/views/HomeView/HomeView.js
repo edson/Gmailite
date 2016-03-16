@@ -11,7 +11,7 @@ import SystemLabelList from 'containers/SystemLabelList'
 // the component can be tested w/ and w/o being connected.
 // See: http://rackt.github.io/redux/docs/recipes/WritingTests.html
 const mapStateToProps = (state) => ({
-  email: state.gmail.email,
+  email: state.gmail.profile.emailAddress,
   loading: state.gmail.loading
 })
 
