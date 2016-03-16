@@ -9,30 +9,75 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 export const SET_GMAIL_CREDENTIALS = 'SET_GMAIL_CREDENTIALS'
 export const CHANGE_LOADING = 'CHANGE_LOADING'
+export const SET_GMAIL_LABELS = 'SET_GMAIL_LABELS'
+export const SELECT_GMAIL_LABEL = 'SELECT_GMAIL_LABEL'
 
 // ------------------------------------
 // Default state
 // ------------------------------------
 let defaultState = {
   email: '',
-  loading: true
+  loading: true,
+  labels: [],
+  currentLabel: null
 }
+
+/*
+// Proposal for state architecture
+let proposal = {
+  loading,
+
+  profile: {
+    emailAddress
+  },
+
+  labels: [{
+    id, text, numEmails
+  }, ...],
+
+  emails: [{
+    id, text, ...
+  }, ...],
+
+  openEmail: {
+    id, text, ...
+  },
+
+  currentLabel: {
+    id, text, numEmails
+  }
+}
+*/
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const connect = () => {
   return (dispatch, getState) => {
+    dispatch(turnLoadingOn())
     gmailAuth(false, populateCredentials(dispatch), clearCredentials(dispatch))
   }
 }
 
 export const checkAuth = () => {
   return (dispatch, getState) => {
-    gmailAuth(true, populateCredentials(dispatch), clearCredentials(dispatch))
+    dispatch(turnLoadingOn())
+    gmailAuth(true, () => {
+      populateCredentials(dispatch)()
+      listLabels(dispatch)()
+    }, clearCredentials(dispatch))
   }
 }
 
+export const selectLabel = (label) => {
+  return (dispatch, getState) => {
+    console.log('TODO: selected label is', label)
+    dispatch(selectGmailLabel(label))
+  }
+}
+
+// Internal Actions
+// ------------------------------------
 export const populateCredentials = (dispatch) => {
   return () => {
     gapi.client.gmail.users.getProfile({ userId: 'me' }).execute((resp) => {
@@ -49,15 +94,28 @@ export const clearCredentials = (dispatch) => {
   }
 }
 
+export const listLabels = (dispatch) => {
+  return () => {
+    gapi.client.gmail.users.labels.list({ userId: 'me' }).execute((resp) => {
+      dispatch(setLabels(resp.labels))
+    })
+  }
+}
+
+// Redux actions (they call the reducer)
+// ------------------------------------
 export const setCredentials = createAction(SET_GMAIL_CREDENTIALS)
 export const turnLoadingOn = createAction(CHANGE_LOADING, () => true)
 export const turnLoadingOff = createAction(CHANGE_LOADING, () => false)
+export const setLabels = createAction(SET_GMAIL_LABELS)
+export const selectGmailLabel = createAction(SELECT_GMAIL_LABEL, (label) => label)
 
 // Exposed actions
 
 export const actions = {
   connect,
-  checkAuth
+  checkAuth,
+  selectLabel
 }
 
 // ------------------------------------
@@ -65,7 +123,9 @@ export const actions = {
 // ------------------------------------
 export default handleActions({
   [SET_GMAIL_CREDENTIALS]: (state, { payload }) => Object.assign({}, state, payload),
-  [CHANGE_LOADING]: (state, { payload }) => Object.assign({}, state, { loading: payload })
+  [CHANGE_LOADING]: (state, { payload }) => Object.assign({}, state, { loading: payload }),
+  [SET_GMAIL_LABELS]: (state, { payload }) => Object.assign({}, state, { labels: payload }),
+  [SELECT_GMAIL_LABEL]: (state, {payload}) => Object.assign({}, state, { currentLabel: payload })
 }, defaultState)
 
 // ------------------------------------

@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { actions as gmailActions } from 'redux/modules/gmail'
 import classes from './HomeView.scss'
+import UserLabelList from 'containers/UserLabelList'
+import SystemLabelList from 'containers/SystemLabelList'
 
 // We define mapStateToProps where we'd normally use
 // the @connect decorator so the data requirements are clear upfront, but then
@@ -49,6 +51,12 @@ export class HomeView extends React.Component {
         <h1 className={ !loading && email ? '' : classes.hidden }>
           Welcome, {email}
         </h1>
+
+        <h3>System labels</h3>
+        <SystemLabelList />
+
+        <h3>User labels</h3>
+        <UserLabelList />
       </div>
     )
   }
