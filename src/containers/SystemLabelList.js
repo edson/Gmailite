@@ -12,7 +12,7 @@ const mapStateToProps = (state) => ({
 })
 
 const actions = Object.assign({}, {
-  onLabelClick: gmailActions.selectLabel
+  onLabelClick: gmailActions.listEmailsByLabel
 })
 
 export default connect(mapStateToProps, actions)(LabelList)

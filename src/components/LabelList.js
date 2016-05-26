@@ -1,16 +1,16 @@
 import React, { PropTypes } from 'react'
-import Label from './Label'
+import ClickableLink from './ClickableLink'
 
 const LabelList = ({ labels, onLabelClick }) => (
   <ul>
     {labels.map(label =>
       <li key={label.id}>
-        <Label
+        <ClickableLink
           {...label}
           onClick={() => onLabelClick(label)}
         >
           {label.name}
-        </Label>
+        </ClickableLink>
       </li>
     )}
   </ul>

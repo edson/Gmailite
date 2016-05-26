@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 
-const Label = ({ selected, children, onClick }) => {
+const ClickableLink = ({ selected, children, onClick }) => {
   if (selected) {
     return <span>{children}</span>
   }
@@ -17,10 +17,10 @@ const Label = ({ selected, children, onClick }) => {
   )
 }
 
-Label.propTypes = {
+ClickableLink.propTypes = {
   selected: PropTypes.bool,
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired
 }
 
-export default Label
+export default ClickableLink

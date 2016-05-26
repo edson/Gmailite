@@ -1,9 +1,17 @@
+// NEXT:
+// - Finish "get emails" part article #3
+// - Integrate webservices and idb to cache emails' info (specially idb part)
+// - document that
+// - manual batch call for GET emails (so many calls now...)
+// - use immutable.js
+
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { actions as gmailActions } from 'redux/modules/gmail'
 import classes from './HomeView.scss'
 import UserLabelList from 'containers/UserLabelList'
 import SystemLabelList from 'containers/SystemLabelList'
+import EmailList from 'containers/EmailList'
 
 // We define mapStateToProps where we'd normally use
 // the @connect decorator so the data requirements are clear upfront, but then
@@ -52,11 +60,21 @@ export class HomeView extends React.Component {
           Welcome, {email}
         </h1>
 
-        <h3>System labels</h3>
-        <SystemLabelList />
+        <div className='row'>
+          <div className='col-md-3'>
+            <h3>System labels</h3>
+            <SystemLabelList />
 
-        <h3>User labels</h3>
-        <UserLabelList />
+            <h3>User labels</h3>
+            <UserLabelList />
+          </div>
+
+          <div className='col-md-9'>
+            <h3>Emails</h3>
+            <EmailList />
+          </div>
+        </div>
+
       </div>
     )
   }
